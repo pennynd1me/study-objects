@@ -1,8 +1,10 @@
 package com.pennynd1me.study._01_ticket;
 
+import lombok.Getter;
+
 /** 관람객의 소지품 가방 */
 public class Bag {
-    private Long amount;
+    @Getter private Long amount;
     private Invitation invitation;
     private Ticket ticket;
 
