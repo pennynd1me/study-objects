@@ -15,6 +15,11 @@ public class TheaterTest {
     List<Ticket> givenTickets() {
         List<Ticket> tickets = new ArrayList<>();
         tickets.add(new Ticket(givenTicketFee));
+        tickets.add(new Ticket(givenTicketFee));
+        tickets.add(new Ticket(givenTicketFee));
+        tickets.add(new Ticket(givenTicketFee));
+        tickets.add(new Ticket(givenTicketFee));
+        tickets.add(new Ticket(givenTicketFee));
         return tickets;
     }
 
@@ -44,16 +49,28 @@ public class TheaterTest {
                 return new Audience(bag);
             }
 
+//            @Test
+//            @DisplayName("(사이드 이펙트) 관람객의 가방에 티켓을 넣어준다.")
+//            void it_puts_a_ticket_into_bag() {
+//                final Audience 관람객 = given_초대장_있는_관람객();
+//                final Theater 극장 = given_극장();
+//                final Long beforeMoney = 관람객.getBag().getAmount();
+//                극장.enter(관람객);
+//
+//                Assertions.assertTrue(관람객.getBag().hasTicket(), "관람객의 가방에는 티켓이 들어있다.");
+//                Assertions.assertEquals(beforeMoney, 관람객.getBag().getAmount(), "관람객의 돈은 늘지도 줄지도 않는다.");
+//            }
+
             @Test
-            @DisplayName("(사이드 이펙트) 관람객의 가방에 티켓을 넣어준다.")
-            void it_puts_a_ticket_into_bag() {
+            @DisplayName("관람객에게 티켓을 교환해준다.")
+            void it_exchange_invitation_for_a_ticket_to_audience() {
                 final Audience 관람객 = given_초대장_있는_관람객();
                 final Theater 극장 = given_극장();
-                final Long beforeMoney = 관람객.getBag().getAmount();
+                final Long beforeMoney = 관람객.buy(given_매표소().getTicket());
                 극장.enter(관람객);
 
                 Assertions.assertTrue(관람객.getBag().hasTicket(), "관람객의 가방에는 티켓이 들어있다.");
-                Assertions.assertEquals(beforeMoney, 관람객.getBag().getAmount(), "관람객의 돈은 늘지도 줄지도 않는다.");
+                Assertions.assertEquals(beforeMoney, 관람객.buy(given_매표소().getTicket()), "관람객의 돈은 늘지도 줄지도 않는다.");
             }
         }
 
@@ -65,24 +82,54 @@ public class TheaterTest {
                 return new Audience(bag);
             }
 
+//            @Test
+//            @DisplayName("(사이드 이펙트) 관람객의 가방에 티켓을 넣어준다.")
+//            void it_puts_a_ticket_into_bag() {
+//                final Audience 관람객 = given_초대장_없는_관람객();
+//                given_극장().enter(관람객);
+//
+//                Assertions.assertTrue(관람객.getBag().hasTicket(), "관람객의 가방에는 티켓이 들어있다.");
+//            }
+
+//            @Test
+//            @DisplayName("티켓 값 만큼의 가방 속 돈을 감소시킨다.")
+//            void it_reduces_money_in_the_bag() {
+//                final Audience 관람객 = given_초대장_없는_관람객();
+//                final Long beforeMoney = 관람객.getBag().getAmount();
+//                given_극장().enter(관람객);
+//
+//                final Long afterMoney = 관람객.getBag().getAmount();
+//                Assertions.assertTrue(beforeMoney - afterMoney == givenTicketFee, "관람객의 돈은 티켓 값만큼 줄어든다.");
+//            }
+
             @Test
-            @DisplayName("(사이드 이펙트) 관람객의 가방에 티켓을 넣어준다.")
-            void it_puts_a_ticket_into_bag() {
+            @DisplayName("관람객에게 티켓을 판매한다.")
+            void it_sells_a_ticket_to_audience() {
                 final Audience 관람객 = given_초대장_없는_관람객();
-                given_극장().enter(관람객);
+                final Theater 극장 = given_극장();
+                final Long beforeMoney = 관람객.getBag().getAmount();
+
+                극장.enter(관람객);
+
+                final Long afterMoney = 관람객.getBag().getAmount();
 
                 Assertions.assertTrue(관람객.getBag().hasTicket(), "관람객의 가방에는 티켓이 들어있다.");
+                Assertions.assertTrue(beforeMoney - afterMoney == givenTicketFee, "관람객의 돈은 티켓 값만큼 줄어든다.");
             }
 
             @Test
-            @DisplayName("티켓 값 만큼의 가방 속 돈을 감소시킨다.")
-            void it_reduces_money_in_the_bag() {
+            @DisplayName("(사이드 이펙트) 매표소의 보유 금액이 티켓 가격만큼 늘어난다.")
+            void it_gets_ticket_fee() {
+                final Theater 극장 = given_극장();
                 final Audience 관람객 = given_초대장_없는_관람객();
-                final Long beforeMoney = 관람객.getBag().getAmount();
-                given_극장().enter(관람객);
+                final Long beforeMoney = 극장.getTicketSeller().getTicketOffice().getAmount();
 
-                final Long afterMoney = 관람객.getBag().getAmount();
-                Assertions.assertTrue(beforeMoney - afterMoney == givenTicketFee, "관람객의 돈은 티켓 값만큼 줄어든다.");
+                극장.enter(관람객);
+
+                final Long afterMoney = 극장.getTicketSeller().getTicketOffice().getAmount();
+
+                Assertions.assertTrue(afterMoney - beforeMoney == givenTicketFee, "매표소의 돈은 티켓 값만큼 늘어난다.");
+
             }
         }
     }
