@@ -28,10 +28,26 @@ public class Bag {
     }
 
     /**
+     * 가방의 행위를 표현하는 메소드
+     * @param ticket
+     * @return if : 초대장이 있다면 0L
+     * else : ticket.getFee()   티켓의 가격
+     */
+    public Long hold(Ticket ticket) {
+        if (hasInvitation()) {
+            setTicket(ticket);
+            return 0L;
+        } else {
+            setTicket(ticket);
+            minusAmount(ticket.getFee());
+            return ticket.getFee();
+        }
+    }
+    /**
      * 관람객이 초대장을 가지고 있다면 true 를 리턴한다.
      * @return invitation != null
      */
-    public boolean hasInvitation() {
+    private boolean hasInvitation() {
         return invitation != null;
     }
 
@@ -43,11 +59,11 @@ public class Bag {
         return ticket != null;
     }
 
-    public void setTicket(Ticket ticket) {
+    private void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
 
-    public void minusAmount(Long amount) {
+    private void minusAmount(Long amount) {
         this.amount -= amount;
     }
 
