@@ -1,7 +1,7 @@
 package com.pennynd1me.study._02_movie;
 
 /** 할인 정책을 표현하는 DiscountPolicy 를 상속받는 금액 할인 정책 클래스 */
-public class AmountDiscountPolicy extends DiscountPolicy {
+public class AmountDiscountPolicy extends DefaultDiscountPolicy {
     /** 할인 요금 */
     private Money discountAmount;
 

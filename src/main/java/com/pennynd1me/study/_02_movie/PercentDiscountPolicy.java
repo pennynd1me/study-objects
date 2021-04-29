@@ -1,7 +1,7 @@
 package com.pennynd1me.study._02_movie;
 
 /** 할인 정책을 표현하는 DiscountPolicy 를 상속받는 비율 할인 정책 클래스 */
-public class PercentDiscountPolicy extends DiscountPolicy {
+public class PercentDiscountPolicy extends DefaultDiscountPolicy {
     private double percent;
 
     /**
